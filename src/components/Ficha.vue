@@ -10,7 +10,7 @@
             <div class="card-horizontal-excerpt">
                 <p>{{ recortarDescripcion }}</p>
                 <div id="card-last-row">
-                    <small>{{ fecha }}</small>
+                    <small>{{ fecha.toLocaleString('es-ES', {day: "2-digit", month: "long", year: "numeric"}) }}</small>
                     <button>Ver Ficha</button>
                 </div>
             </div>
@@ -46,8 +46,7 @@ export default {
             required: false,
         },
         fecha: {
-            type: String,
-            default: '',
+            type: Date,
             required: false,
         },
         puntuacion: {

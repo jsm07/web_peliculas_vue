@@ -1,16 +1,17 @@
 <template>
     <div id="listado">
-        <div v-if="peliculas.length === 0">
-            <p>No hay pelicula disponibles.</p>
+        <div v-if="items.length === 0">
+            <slot name="no-items">
+                <p>
+                    No hay ni un jodido elemento.
+                </p>
+            </slot>
         </div>
-        <div v-for="pelicula in peliculas" :key="pelicula.id">
-            <Ficha
-                :nombre="pelicula.title"
-                :descripcion="pelicula.overview"
-                :fecha="pelicula.release_date"
-                :pathPoster="pelicula.poster_path"
-            >
-            </Ficha>
+        <div v-for="item in items" :key="item.id">
+            <slot :item="item">
+
+            </slot>
+
         </div>
     </div>
 </template>
@@ -24,9 +25,13 @@ export default {
         Ficha,
     },
     props: {
-        peliculas: {
+        items: {
             type: Array,
         },
+        itemName: {
+            type: String,
+            default: ''
+        }
     },
 };
 </script>
