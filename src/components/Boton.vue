@@ -34,7 +34,7 @@
   .button {
     display: inline-block;
     border-radius: 4px;
-    background-color: #1e74f4;
+    background-color: #41b883;
     border: none;
     color: #ffffff;
     text-align: center;

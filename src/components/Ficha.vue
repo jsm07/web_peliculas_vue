@@ -1,36 +1,36 @@
 <template>
-  <div class="card-horizontal noSelect">
-    <div class="card-horizontal-image">
-      <a href="#"><img :src="pathImagen + pathPoster" alt="Poster"/></a>
-    </div>
-    <div class="card-horizontal-body">
-      <div class="card-horizontal-heading">
-        <h3>{{ nombre }}</h3>
+  <div class="movie">
+    <div class="movie_header">
+      <div class="movie_poster">
+        <img :src="urlCompletaImagen(this.pathPoster)" />
       </div>
-      <div class="card-horizontal-excerpt">
-        <p>{{ recortarDescripcion }}</p>
-        <ranking :puntuacion="this.puntuacion" :editable="false" />
-        <div id="card-last-row">
+      <h2 class="movie_title">
+        <div class="title_content">
+          <span :title="nombre">{{ recortarTexto(this.nombre, 35) }}</span>
           <small
-            >{{ fecha.toLocaleString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }) }}
+            >({{ fecha.toLocaleString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }) }})
           </small>
-          <boton :nombre="'Ver Ficha'" />
         </div>
+      </h2>
+      <div class="movie_stars">
+        <slot name="slot-1"></slot>
       </div>
+    </div>
+    <div class="movie_content">
+      <p class="movie_plot">
+        {{ recortarTexto(this.descripcion, 200) }}
+      </p>
+    </div>
+    <div class="movie_footer">
+      <slot name="slot-2"></slot>
     </div>
   </div>
 </template>
 
 <script>
-  import { Ranking, Boton } from '@/components';
-
   export default {
-    components: {
-      Ranking,
-      Boton,
-    },
     props: {
-      peliculaId: {
+      id: {
         type: Number,
         required: false,
       },
@@ -44,10 +44,8 @@
         default: 'Descripción',
         required: true,
       },
-      pathImagen: {
+      pathFondo: {
         type: String,
-        default: 'https://image.tmdb.org/t/p/w500/',
-        required: false,
       },
       pathPoster: {
         type: String,
@@ -64,107 +62,71 @@
         required: false,
       },
     },
-    computed: {
-      recortarDescripcion: function() {
-        if (this.descripcion.length > 200) {
-          return this.descripcion.substring(0, 200) + '...';
+    methods: {
+      recortarTexto: function(text, long) {
+        if (text.length > long) {
+          return text.substring(0, long) + '...';
         }
-        return this.descripcion;
+        return text;
+      },
+      urlCompletaImagen: function(path) {
+        const pathImagen = 'https://image.tmdb.org/t/p/w500';
+        return pathImagen + path;
       },
     },
   };
 </script>
 
 <style lang="scss" scoped>
-  .card-horizontal {
-    margin: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    display: flex;
-    text-decoration: none;
-    position: relative;
-  }
-
-  .card-horizontal a {
-    text-decoration: none;
-  }
-
-  .card-horizontal-image {
-    padding-right: 10px;
-  }
-
-  .card-horizontal-image img {
-    width: 220px;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .card-horizontal-body {
+  .movie {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    padding: 0 10px;
-  }
-
-  .card-horizontal-heading h3 {
-    color: #333;
-    font-size: 1.4rem;
-    padding-bottom: 3px;
-    padding-top: 5px;
-  }
-
-  .card-horizontal-excerpt p {
-    color: #999;
-    font-size: 1.05rem;
-    padding-top: 8px;
-  }
-
-  .card-horizontal-excerpt small {
-    color: #777;
-    font-size: 0.85rem;
-    display: block;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-
-  #card-last-row {
-    display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    flex-wrap: wrap;
+    min-height: 580px;
+    background-color: #18212e;
+    margin-top: 15px;
+    padding: 15px 25px 15px 15px;
+    border-radius: 5px;
+    &_poster {
+      padding: 5px;
+      img {
+        height: 200px;
+        border-radius: 5px;
+      }
+    }
+    &_title {
+      text-align: center;
+      margin: 0;
+      color: lightgrey;
+    }
+    &_stars {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    &_plot {
+      color: grey;
+    }
+    &_footer {
+      text-align: center;
+    }
+    .title_content {
+      display: flex;
+      flex-direction: column;
+      small {
+        font-size: 12px;
+      }
+    }
   }
 
-  @media (max-width: 30rem) {
-    .card-horizontal {
-      flex-direction: column;
-      width: 100%;
-      margin: 0;
-      border: none;
-      box-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.1);
-      position: static;
+  @media only screen and (max-width: 600px) {
+    .movie {
+      justify-content: center;
     }
-    .card-horizontal-image {
-      padding-right: 0;
-    }
-    .card-horizontal-image img {
-      width: 100%;
-    }
-    .card-horizontal-body {
-      padding: 0.7rem 0.9rem;
-      position: relative;
-    }
-    .card-horizontal-heading h3 {
-      font-size: 1.3rem;
-    }
-    .card-horizontal-excerpt p {
-      padding-bottom: 8px;
-      font-size: 0.85rem;
-    }
-    .card-horizontal-excerpt small {
-      padding-bottom: 0;
-    }
-    .card-horizontal-excerpt small,
-    .card-category ul li {
-      font-size: 0.7rem;
+    .movie_stars {
+      justify-content: center;
     }
   }
 </style>

@@ -1,22 +1,22 @@
 <template>
   <div class="rate">
     <label
-      title="text1"
+      title="1"
       :class="{ activa: puntuacionRound < 2 || puntuacionRound > 0, editable: editable }"
     ></label>
     <label
-      title="text2"
+      title="2"
       :class="{ activa: puntuacionRound < 3 || puntuacionRound > 1, editable: editable }"
     ></label>
     <label
-      title="text3"
+      title="3"
       :class="{ activa: puntuacionRound < 4 || puntuacionRound > 2, editable: editable }"
     ></label>
     <label
-      title="text4"
+      title="4"
       :class="{ activa: puntuacionRound < 5 || puntuacionRound > 3, editable: editable }"
     ></label>
-    <label title="text5" :class="{ activa: puntuacionRound > 4 }"></label>
+    <label title="5" :class="{ activa: puntuacionRound > 4 }"></label>
   </div>
 </template>
 
