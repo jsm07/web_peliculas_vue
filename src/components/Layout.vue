@@ -5,6 +5,9 @@
         <img alt="Vue logo" src="../assets/logo.png" />
         <h4>Tus mejores películas</h4>
       </div>
+      <div>
+        <slot name="busqueda"></slot>
+      </div>
     </div>
     <nav class="main-nav">
       <ul>
@@ -48,6 +51,29 @@
     grid-area: header;
     background-color: white;
     color: #41b883;
+    display: flex;
+    justify-content: space-between;
+
+    div:nth-child(2) {
+      width: 15%;
+      margin-right: 15px;
+    }
+
+    #input-busqueda {
+      width: 60%;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: white;
+      padding: 8px 20px 8px 20px;
+      -webkit-transition: width 0.4s ease-in-out;
+      transition: width 0.4s ease-in-out;
+    }
+
+    #input-busqueda:focus {
+      width: 100%;
+    }
   }
 
   .header > div {

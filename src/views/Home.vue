@@ -1,8 +1,13 @@
 <template>
   <div>
     <layout>
+      <template slot="busqueda">
+        <input v-model="busqueda" type="text" id="input-busqueda" name="search" placeholder="Buscar.." />
+      </template>
       <template>
-        <spinner v-show="loading" />
+        <div v-show="loading" style="height:900px;">
+          <spinner />
+        </div>
         <div v-show="!loading">
           <paginacion
             :total-pages="total_pages"
@@ -74,11 +79,27 @@
         total_pages: 1,
         total_results: 1,
         loading: true,
+        debouncedInput: '',
+        timeout: null,
       };
     },
-    computed: mapState({
-      peliculas: (state) => state.peliculas,
-    }),
+    computed: {
+      ...mapState({
+        peliculas: (state) => state.peliculas,
+      }),
+      busqueda: {
+        get() {
+          return this.debouncedInput;
+        },
+        set(val) {
+          if (this.timeout) clearTimeout(this.timeout);
+          this.timeout = setTimeout(() => {
+            this.debouncedInput = val;
+            console.log('busqueda', this.debouncedInput);
+          }, 300);
+        },
+      },
+    },
     created() {
       this.page = this.$route.query.page || 1;
       this.getPelis();
