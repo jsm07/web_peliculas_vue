@@ -8,13 +8,17 @@
         <div class="top">
           <div class="details-summary">
             <div class="top">
-              <h3>{{ nombre }}</h3>
+              <h3>
+                {{ nombre }}
+              </h3>
+              <h5>{{ tagline }}</h5>
             </div>
             <div class="center">
-              <h5>{{ nombreGeneros() }}</h5>
-              <ul>
-                <li>{{ duracion }} MIN</li>
-              </ul>
+              <div class="column">
+                <h5>{{ nombreGeneros() }}</h5>
+                <h6>{{ duracion }} Min</h6>
+              </div>
+              <span class="popularity dot">{{ popularityRound }}</span>
             </div>
             <hr />
             <div class="bottom">
@@ -58,6 +62,12 @@
       nombre: {
         type: String,
       },
+      tagline: {
+        type: String,
+      },
+      popularity: {
+        type: Number,
+      },
       pathFondo: {
         type: String,
       },
@@ -88,6 +98,11 @@
     created() {
       library.add(faFilm);
     },
+    computed: {
+      popularityRound: function() {
+        return Math.round(this.popularity);
+      },
+    },
     methods: {
       urlCompletaImagen: function(path) {
         const pathImagen = 'https://image.tmdb.org/t/p/w500';
@@ -110,6 +125,13 @@
   a {
     text-decoration: none;
     color: white;
+  }
+  .dot {
+    height: 50px;
+    width: 50px;
+    background-color: #e3f276;
+    border-radius: 50%;
+    display: inline-block;
   }
   .dark-overlay .movie-details {
     display: flex;
@@ -180,38 +202,49 @@
   }
 
   .details-summary > .top h3 {
+    font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.04rem;
+    margin-bottom: 5px;
+  }
+  .details-summary > .top h5 {
     font-weight: 400;
+    text-transform: initial;
+    letter-spacing: 0.03rem;
+    margin-top: 5px;
   }
   .details-summary > .center {
     display: flex;
     justify-content: space-between;
   }
 
-  .details-summary > .center > h5 {
+  .details-summary > .center > .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .details-summary > .center > .popularity {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 2.5;
+  }
+
+  .details-summary > .center > .column > h5 {
     text-transform: capitalize;
     font-size: 0.72rem;
     font-weight: 600;
     color: #5c554d;
-  }
-  .details-summary > .center > ul {
-    list-style-type: none;
-    display: flex;
-    align-items: center;
+    margin: 5px 0px 5px 0px;
   }
 
-  .details-summary > .center > ul > li:first-child {
-    margin-right: 0.3rem;
-  }
-
-  .details-summary > .center > ul > li {
-    text-transform: uppercase;
+  .details-summary > .center > .column > h6 {
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 0.35rem;
     background: #ebeef0;
     padding: 0 0.3rem;
+    margin: 5px 0px 5px 0px;
   }
 
   .details-summary > hr {

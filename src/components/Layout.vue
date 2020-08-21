@@ -2,7 +2,7 @@
   <div class="grid-container">
     <div class="header">
       <div>
-        <img alt="Vue logo" src="../assets/logo.png" />
+        <img alt="Vue logo" src="@/assets/logo.png" />
         <h4>Tus mejores películas</h4>
       </div>
       <div>

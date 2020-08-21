@@ -2,7 +2,13 @@
   <div>
     <layout>
       <template slot="busqueda">
-        <input v-model="busqueda" type="text" id="input-busqueda" name="search" placeholder="Buscar.." />
+        <input
+          v-on:input="debounceInput"
+          type="text"
+          id="input-busqueda"
+          name="search"
+          placeholder="Buscar.."
+        />
       </template>
       <template>
         <div v-show="loading" style="height:900px;">
@@ -79,42 +85,36 @@
         total_pages: 1,
         total_results: 1,
         loading: true,
-        debouncedInput: '',
-        timeout: null,
+        search: null,
       };
     },
     computed: {
       ...mapState({
         peliculas: (state) => state.peliculas,
       }),
-      busqueda: {
-        get() {
-          return this.debouncedInput;
-        },
-        set(val) {
-          if (this.timeout) clearTimeout(this.timeout);
-          this.timeout = setTimeout(() => {
-            this.debouncedInput = val;
-            console.log('busqueda', this.debouncedInput);
-          }, 300);
-        },
-      },
     },
     created() {
       this.page = this.$route.query.page || 1;
       this.getPelis();
     },
     methods: {
+      debounceInput: _.debounce(function(e) {
+        this.search = e.target.value;
+        this.getPelis();
+        this.actualizarQuery();
+      }, 800),
       async getPelis() {
         this.loading = true;
         const API_KEY = process.env.VUE_APP_API_KEY;
 
         try {
-          const { data, status } = await axios.get(`https://api.themoviedb.org/3/movie/popular`, {
+          const ruta = this.search ? `search/movie` : `movie/popular`;
+          const { data, status } = await axios.get(`https://api.themoviedb.org/3/${ruta}`, {
             params: {
               api_key: API_KEY,
               language: 'es',
               page: this.page,
+              query: this.search,
             },
           });
           this.$store.dispatch('setPeliculas', data.results);
@@ -127,10 +127,20 @@
       },
       onPageChange(page) {
         this.page = page;
-        this.$router.push({ name: 'Home', query: { page: this.page } });
+        this.actualizarQuery();
       },
       detallePelicula(peliculaId) {
         this.$router.push({ name: 'Pelicula', query: { id: peliculaId } });
+      },
+      actualizarQuery() {
+        let params = { page: this.page };
+        if (this.search) {
+          params.search = this.search;
+        }
+        this.$router.push({
+          name: 'Home',
+          query: params,
+        });
       },
     },
     watch: {

@@ -2,7 +2,8 @@
   <div class="movie">
     <div class="movie_header">
       <div class="movie_poster">
-        <img :src="urlCompletaImagen(this.pathPoster)" />
+        <img v-if="this.pathPoster" :src="urlCompletaImagen(this.pathPoster)" alt="Portada película" />
+        <img v-if="!this.pathPoster" src="@/assets/default-movie.png" alt="Portada película" />
       </div>
       <h2 class="movie_title">
         <div class="title_content">

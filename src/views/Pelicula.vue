@@ -2,10 +2,16 @@
   <div>
     <layout>
       <template>
+        <ul class="breadcrumb">
+          <li><span @click="$router.go(-1)">Inicio</span></li>
+          <li>Película</li>
+        </ul>
         <detalle
           :id="this.id"
           :homepage="this.pelicula.homepage"
           :nombre="this.pelicula.title"
+          :tagline="this.pelicula.tagline"
+          :popularity="this.pelicula.popularity"
           :pathFondo="this.pelicula.backdrop_path"
           :pathPoster="this.pelicula.poster_path"
           :descripcion="this.pelicula.overview"
@@ -69,4 +75,36 @@
   };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  /* Style the list */
+  ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+  }
+
+  /* Display list items side by side */
+  ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+  }
+
+  /* Add a slash symbol (/) before/behind each list item */
+  ul.breadcrumb li + li:before {
+    padding: 8px;
+    color: black;
+    content: '/\00a0';
+  }
+
+  /* Add a color to all links inside the list */
+  ul.breadcrumb li span {
+    color: #0275d8;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Add a color on mouse-over */
+  ul.breadcrumb li span:hover {
+    color: #01447e;
+    text-decoration: underline;
+  }
+</style>
